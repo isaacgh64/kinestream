@@ -7,7 +7,7 @@ type SectionInfoProps = {
 export default function SectionInfo({title,pos} : SectionInfoProps) {
     return (
         <section>
-            <h2 className="text-2xl text-sky-500 font-bold mb-4">
+            <h2 className="text-3xl text-sky-500 font-bold mb-4">
                 {title}
             </h2>
             <div>

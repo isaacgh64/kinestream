@@ -1,12 +1,16 @@
+import { BrowserRouter} from "react-router";
 import TopMenu from "./components/Global/TopMenu"
-import HomePage from './components/Home/HomePage';
+import AppRoutes from './routes/AppRoutes';
 
 function App() {
 
   return (
     <>
-      <TopMenu/>
-      <HomePage/>
+      <BrowserRouter>
+        <TopMenu/>
+        <AppRoutes/>
+      </BrowserRouter>
+      
     </>
   )
 }
