@@ -35,8 +35,8 @@ export default function RegisterView() {
       <>
         {/*Input name*/}
         <div className="flex flex-col gap-2">
-          <label htmlFor="names" className="text-xl cursor-pointer">Nombre:</label>
-          <input type="names" id="text" placeholder="Añada su nombre" className="bg-slate-100 p-2 rounded-lg" name="names"/>
+          <label htmlFor="named" className="text-xl cursor-pointer">Nombre:</label>
+          <input type="name" id="named" placeholder="Añada su nombre" className="bg-slate-100 p-2 rounded-lg" name="named"/>
         </div>
         {/*Input mail*/}
         <div className="flex flex-col gap-2">
