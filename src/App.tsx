@@ -9,8 +9,7 @@ function App() {
       <BrowserRouter>
         <TopMenu/>
         <AppRoutes/>
-      </BrowserRouter>
-      
+      </BrowserRouter> 
     </>
   )
 }

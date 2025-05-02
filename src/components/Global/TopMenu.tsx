@@ -3,27 +3,24 @@ import { Link } from "react-router";
 // Top Menu in all pages
 export default function TopMenu() {
   return (
-    <nav className="border-b-2 shadow-2xl border-gray-400 w-full p-12 bg-sky-500 flex flex-row justify-between">
-      <Link to={"/"}><img src="/logo_app.png" width={90}  alt="" /></Link>
-  
-      {/* <div className="flex flex-row"> */}
-          
-      {/* </div> */}
-        <ul className="flex flex-row">
-            {/* <li className="me-30 text-2xl text-white font-bold cursor-pointer hover:border-b-3 border-white">Inicio</li> */}
-            <li className="me-30 text-2xl text-white font-bold cursor-pointer hover:border-b-3 border-white">Películas</li>
-            <li className="me-30 text-2xl text-white font-bold cursor-pointer hover:border-b-3 border-white">Series</li>
-            <li className="text-2xl text-white font-bold cursor-pointer hover:border-b-3 border-white">TV</li>
-        </ul>
-        <div className="flex flex-row">
-          <Link to={"/login"} className="text-2xl text-white font-bold cursor-pointer hover:border-b-3 border-white">Iniciar Sesión</Link>
-            <form action="">
-              <select name="" id="" className="text-xl text-white">
-                <option value="" >--IDIOMA--</option>
-              </select>
-            </form>
-            
+    <header className="bg-sky-500 text-white py-10 shadow">
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-4">
+        <div className="text-2xl">
+          <span>🎬 </span>
+          <Link to={"/"} className="font-bold hover:text-blue-800 transition">  KineStream </Link>
         </div>
-    </nav>
+        <nav className="space-x-6 hidden md:flex text-2xl font-bold max-w-7xl">
+          <a href="#" className="hover:underline hover:text-blue-800 transition">Películas</a>
+          <a href="#" className="hover:underline hover:text-blue-800 transition">Series</a>
+          <a href="#" className="hover:underline hover:text-blue-800 transition">TV</a>
+        </nav>
+        <div className="text-2xl font-bold">
+          <Link to={"/login"} className="cursor-pointer hover:underline hover:text-blue-800 transition">Iniciar Sesión</Link>
+          <span> 👤</span>
+        </div>
+      </div>
+      
+    </header>
+    
   )
 }

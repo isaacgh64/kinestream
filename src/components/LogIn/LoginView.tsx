@@ -46,23 +46,23 @@ export default function LoginView() {
     return (
         <>
             {/*Input mail*/}
-            <div className="flex flex-col gap-2">
-                <label htmlFor="mail" className="text-xl cursor-pointer">Correo electrónico:</label>
-                <input type="mail" id="mail" placeholder="Añade el correo electrónico" className="bg-slate-100 p-2 rounded-lg" name="mail" onChange={handleChange}/>
+            <div className="mb-4 relative">
+                <label htmlFor="mail" className="block text-xl font-medium text-gray-700 mb-1 cursor-pointer">Correo electrónico:</label>
+                <input type="mail" id="mail" placeholder="Añade el correo electrónico" className=" w-full bg-slate-100 p-2 rounded-lg outline-blue-500" name="mail" onChange={handleChange}/>     
             </div>
             {/*Input password*/}
-            <div className="flex flex-col gap-2">
-                <label htmlFor="password" className="text-xl cursor-pointer">Contraseña:</label>
+            <div className="mb-4 relative">
+                <label htmlFor="password" className="block text-xl font-medium text-gray-700 mb-1 cursor-pointer">Contraseña:</label>
                 <div className="relative w-full">
-                    <input type={(isShowPassword)?"text":"password"} id="password" placeholder="Introduce la contraseña" className="w-full bg-slate-100 p-2 rounded-lg" name="password" onChange={handleChange}/>
-                    <button type="button" className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-600 cursor-pointer" onClick={handleChangeShowPassword}>
-                        {(isShowPassword)?<FaEye className="text-sky-500"/>:<FaEyeSlash className="text-sky-500"/>}
+                    <input type={(isShowPassword)?"text":"password"} id="password" placeholder="Introduce la contraseña" className="w-full bg-slate-100 p-2 rounded-lg outline-blue-500" name="password" onChange={handleChange}/>
+                    <button type="button" className="absolute inset-y-0 right-0 flex items-center px-3 text-blue-500 cursor-pointer " onClick={handleChangeShowPassword}>
+                        {(isShowPassword)?<FaEye/>:<FaEyeSlash/>}
                     </button>
                 </div>
                 
             </div>
             {/*Button Submit*/}
-            <input type="submit" className="bg-sky-500 cursor-pointer w-full p-2 text-white uppercase font-bold rounded-lg mt-2 disabled:opacity-40 disabled:cursor-auto" value={"Iniciar Sesión"} disabled={isValid}/>
+            <input type="submit" className="bg-blue-600 cursor-pointer w-full p-2 text-white uppercase font-bold rounded-lg mt-2 disabled:opacity-40 disabled:cursor-auto" value={"Iniciar Sesión"} disabled={isValid}/>
         </>
     )
 }
