@@ -4,6 +4,13 @@ export type LogInType = {
     password: string,
 }
 
+export type RegisterType = {
+    name: string,
+    mail: string,
+    password: string,
+    repassword: string,
+}
+
 export type LogInTypePage = {
    register: boolean,
 }

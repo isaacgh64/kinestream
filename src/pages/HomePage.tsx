@@ -1,4 +1,4 @@
-import SectionInfo from "./SectionInfo"
+import SectionInfo from "../components/Home/SectionInfo"
 
 export default function HomePage() {
   return (
