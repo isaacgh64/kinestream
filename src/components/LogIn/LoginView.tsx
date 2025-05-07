@@ -12,6 +12,7 @@ import { useToken } from "../../hooks/useToken"
 export default function LoginView() {
     const {dispatch} = useToken()
     const navigate = useNavigate();
+    const [error,setError] = useState('')
 
     //State check LogIn data
     const [logIn, setLogIn] = useState<LogInType>({
@@ -55,7 +56,7 @@ export default function LoginView() {
     },[logIn])
    
     //Error Message
-    const [error,setError] = useState('')
+    
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 

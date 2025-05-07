@@ -3,24 +3,18 @@ import { Link } from "react-router";
 // Top Menu in all pages
 export default function TopMenu() {
   return (
-    <header className="bg-sky-500 text-white py-10 shadow">
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-4">
-        <div className="text-2xl">
-          <span>🎬 </span>
-          <Link to={"/"} className="font-bold hover:text-blue-800 transition">  KineStream </Link>
-        </div>
-        <nav className="space-x-6 hidden md:flex text-2xl font-bold max-w-7xl">
-          <a href="#" className="hover:underline hover:text-blue-800 transition">Películas</a>
-          <a href="#" className="hover:underline hover:text-blue-800 transition">Series</a>
-          <a href="#" className="hover:underline hover:text-blue-800 transition">TV</a>
-        </nav>
-        <div className="text-2xl font-bold">
-          <Link to={"/login"} className="cursor-pointer hover:underline hover:text-blue-800 transition">Iniciar Sesión</Link>
-          <span> 👤</span>
-        </div>
-      </div>
-      
-    </header>
+    <header className="bg-blue-600 text-white py-8 shadow-lg">
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-6">
+      <Link to={"/"} className="text-3xl font-bold hover:text-yellow-300 transition duration-300">KineStream</Link>
+      <nav className="space-x-6 hidden md:flex text-2xl font-semibold">
+        <a href="#" className="hover:underline hover:text-yellow-300 transition duration-300">Películas</a>
+        <a href="#" className="hover:underline hover:text-yellow-300 transition duration-300">Series</a>
+        <a href="#" className="hover:underline hover:text-yellow-300 transition duration-300">TV</a>
+      </nav>
+      <Link to={"/login"} className="bg-yellow-400 text-blue-900 px-4 py-2 rounded-lg font-bold hover:bg-yellow-500 transition duration-300 me-5">Iniciar Sesión</Link>
+    </div>
+</header>
+
     
   )
 }
