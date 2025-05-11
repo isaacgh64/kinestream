@@ -50,8 +50,6 @@ export class API {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
-            console.log(data.error)
             if (data.code === 201) {   
                 dispatch({type:"add-token",payload:{token:data.token}})
                 return true;
