@@ -1,11 +1,11 @@
 import SectionInfo from "../components/Home/SectionInfo"
-import SwiperCarts from '../components/Home/SwiperCards';
+import SwiperCarts from '../components/Global/SwiperCards';
 
 
 export default function HomePage() {
   
   return (
-    <body className="bg-neutral-50">
+    <div className="bg-neutral-50">
       <div className="w-full min-h-[calc(100vh-120px)] flex justify-center bg-neutral-50">
         <main className="w-full max-w-7xl bg-white px-6 py-6 shadow-lg rounded-2xl">
           {/*Welcome section*/}
@@ -35,7 +35,7 @@ export default function HomePage() {
          
         </main>
       </div>
-    </body>
+    </div>
     
   )
 }

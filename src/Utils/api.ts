@@ -1,5 +1,6 @@
 import { Globals } from "./globals";
 import { TokenActions } from "../reducers/token-reducer";
+import User from "../models/user";
 
 export class API {
     //Login API
@@ -68,6 +69,34 @@ export class API {
             console.log(error);
             Globals.messageError = "Error de conexión con el servidor";
             return false; 
+        });
+    }
+
+    //Get Data user with Token
+    public static getDataUser(token : string): Promise<User | null> {
+        
+        return fetch(Globals.serverUrl + "/get_data_user.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                token: token,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.code === 200) {   
+                return User.fromJson(data.user)
+            } else if (data.code === 400) {
+                Globals.messageError = "Los datos no son correctos";
+            }
+            return null;
+        })
+        .catch(error => {
+            console.log(error);
+            Globals.messageError = "Error de conexión con el servidor";
+            return null; 
         });
     }
 }

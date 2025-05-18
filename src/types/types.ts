@@ -19,3 +19,8 @@ export type ShowPasswordType = {
     show: boolean,
     showre:boolean,
 }
+
+export type UserType = {
+    name: string,
+    mail: string,
+}
