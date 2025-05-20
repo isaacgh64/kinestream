@@ -37,7 +37,11 @@ export default function SwiperCards({title}:SwiperCardsProps) {
               <button className="swiper-button-prev-custom bg-white border border-blue-500 text-blue-500 p-2 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition duration-300 h-11 me-2 disabled:opacity-0" onClick={decrementIndex} disabled={(index == 0)?true:false}>
                 <ChevronLeft size={24} />
               </button>
-              <Swiper slidesPerView={2} spaceBetween={8} onSwiper={(swiper) => (swiperRef.current = swiper)}>
+              <Swiper breakpoints={{
+                0: { slidesPerView: 2, spaceBetween:6 },  
+                640: { slidesPerView: 3,spaceBetween:8  },  
+                1024: { slidesPerView: 4,spaceBetween:12  }  
+              }} onSwiper={(swiper) => (swiperRef.current = swiper)}>
                     {
                       elementos.map((item,index) =>(
                         <SwiperSlide key={index}>

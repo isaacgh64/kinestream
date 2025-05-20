@@ -74,7 +74,6 @@ export class API {
 
     //Get Data user with Token
     public static getDataUser(token : string): Promise<User | null> {
-        
         return fetch(Globals.serverUrl + "/get_data_user.php", {
             method: "POST",
             headers: {
@@ -99,4 +98,35 @@ export class API {
             return null; 
         });
     }
+
+    //Modify data user
+    public static modifyDataUser(token : string, name:string, mail:string): Promise<Boolean> {
+        return fetch(Globals.serverUrl + "/modify_data_user.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                token: token,
+                name:name,
+                mail:mail
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.code === 202) {  
+                Globals.messageError = "Los datos se actualizaron con éxito"; 
+                return true;
+            } else if (data.code === 401) {
+                Globals.messageError = "Algo salió mal, intentalo más tarde";
+            }
+            return false;
+        })
+        .catch(error => {
+            console.log(error);
+            Globals.messageError = "Error de conexión con el servidor";
+            return false; 
+        });
+    }
+
 }

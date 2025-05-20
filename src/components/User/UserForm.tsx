@@ -2,10 +2,16 @@ import { useEffect, useState } from 'react'
 import { UserType } from '../../types/types';
 import { API } from '../../Utils/api';
 import { useToken } from '../../hooks/useToken';
+import Dialogo from '../Global/Dialog';
+import { Globals } from '../../Utils/globals';
+import { useNavigate } from 'react-router-dom';
 
 export default function UserForm() {
     const [editing, setEditing] = useState(false);
-    const {state} = useToken()
+    const [message, setMessage] = useState("");
+    const [visible, setVisible] = useState(false);
+    const {state, dispatch} = useToken()
+    const navigate = useNavigate();
     const [user, setUser] = useState<UserType>({
         name:"",
         mail:""
@@ -33,8 +39,36 @@ export default function UserForm() {
       getDataUser()
     },[])
 
+    async function changeDataUser(){
+      if(!user.name.trim() || !user.mail.trim()){
+        setMessage("Error");
+        Globals.messageError="Los campos no pueden estar vacíos";
+         setVisible(true)
+      }else{
+        await API.modifyDataUser(state.token,user.name,user.mail).then(value=>{
+          if(value){
+            setEditing(false)
+            setMessage("Datos actualizados");
+          }else{
+            setMessage("Algo fue mal");
+          }
+          setVisible(true)
+        
+        })
+      }
+    }
+
+    function logOut(){
+      localStorage.removeItem("TOKEN")
+      dispatch({type:'close-login'})
+      navigate("/login");
+      
+    }
+   
+
     return (
         <section className="flex flex-col justify-center items-center">
+          <Dialogo mensaje={message} visible={visible} onClose={() => setVisible(false)} />
               <form className="w-full max-w-4xl">
                 {/* Input name */}
                 <div className="mb-4 flex flex-col gap-2 w-full">
@@ -75,11 +109,11 @@ export default function UserForm() {
                   />
                 </div>
               </form>
-              <div className="flex flex-row gap-10 mt-4">
-                   <button onClick={() => setEditing(!editing)} className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-semibold px-4 py-2 rounded-lg shadow transition cursor-pointer w-45">{editing ? "Guardar cambios":"Editar perfil" }</button>
+              <div className="flex flex-col sm:flex-col md:flex-row md:gap-10 gap-5 mt-2">
+                   <button onClick={() => (!editing)?setEditing(!editing):changeDataUser()} className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-semibold px-4 py-2 rounded-lg shadow transition cursor-pointer w-45">{editing ? "Guardar cambios":"Editar perfil" }</button>
                    <button onClick={() => console.log("buenas")} className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-semibold px-4 py-2 rounded-lg shadow transition cursor-pointer w-45">Cambiar contraseña</button>
               </div>
-             
+               <button onClick={() => logOut()} className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg shadow transition cursor-pointer w-45 mt-5">Cerrar sesión</button>
         </section>
   )
 }
