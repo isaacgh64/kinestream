@@ -9,7 +9,7 @@ export default function TopMenu() {
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6">
       <Link to={"/"} className="text-3xl font-bold hover:text-yellow-300 transition duration-300">KineStream</Link>
       <nav className="space-x-15 hidden md:flex text-2xl font-semibold me-10">
-        <a href="#" className="hover:underline hover:text-yellow-300 transition duration-300">Películas</a>
+        <Link to={"/films"} className="hover:underline hover:text-yellow-300 transition duration-300">Películas</Link>
         <a href="#" className="hover:underline hover:text-yellow-300 transition duration-300">Series</a>
         <a href="#" className="hover:underline hover:text-yellow-300 transition duration-300">TV</a>
       </nav>

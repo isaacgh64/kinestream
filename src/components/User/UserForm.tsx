@@ -69,7 +69,7 @@ export default function UserForm() {
     return (
         <section className="flex flex-col justify-center items-center">
           <Dialogo mensaje={message} visible={visible} onClose={() => setVisible(false)} />
-              <form className="w-full max-w-4xl">
+              <form className="w-full max-w-6xl">
                 {/* Input name */}
                 <div className="mb-4 flex flex-col gap-2 w-full">
                     <label 
@@ -109,11 +109,11 @@ export default function UserForm() {
                   />
                 </div>
               </form>
-              <div className="flex flex-col sm:flex-col md:flex-row md:gap-10 gap-5 mt-2">
+              <div className="flex flex-col sm:flex-col md:flex-row md:gap-10 gap-5 mt-6">
                    <button onClick={() => (!editing)?setEditing(!editing):changeDataUser()} className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-semibold px-4 py-2 rounded-lg shadow transition cursor-pointer w-45">{editing ? "Guardar cambios":"Editar perfil" }</button>
                    <button onClick={() => console.log("buenas")} className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-semibold px-4 py-2 rounded-lg shadow transition cursor-pointer w-45">Cambiar contraseña</button>
               </div>
-               <button onClick={() => logOut()} className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg shadow transition cursor-pointer w-45 mt-5">Cerrar sesión</button>
+               <button onClick={() => logOut()} className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg shadow transition cursor-pointer w-45 mt-8">Cerrar sesión</button>
         </section>
   )
 }
