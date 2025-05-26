@@ -1,14 +1,17 @@
 export type StreamActions = 
-    {type:'add-stream',payload:{id_Stream:number}} |
-    {type: 'close-login'}
+    {type:'add-stream',payload:{id_stream:number, view_stream:boolean}} |
+    {type:'delete-stream'}|
+    {type:'change-view',payload:{view_stream:boolean}}
 
 export type StreamState = {
-    id_Stream: number
+    id_stream: number
+    view_stream:boolean
 }
 
 
 export const initialState : StreamState = {
-    id_Stream:-1,
+    id_stream:-1,
+    view_stream:true,
 }
 
 export const streamReducer = (
@@ -18,13 +21,21 @@ export const streamReducer = (
     if(action.type === 'add-stream'){
         return{
             ...state,
-            id_Stream:action.payload.id_Stream,
+            id_stream:action.payload.id_stream,
+            view_stream:action.payload.view_stream,
         }
     }
-    if(action.type === 'close-login'){
+    if(action.type === 'change-view'){
         return{
             ...state,
-            id_Stream:-1,
+            view_stream:action.payload.view_stream,
+        }
+    }
+    if(action.type === 'delete-stream'){
+        return{
+            ...state,
+            id_stream:-1,
+            view_stream:true
         }
     }
     return state;

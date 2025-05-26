@@ -4,6 +4,7 @@ import LoginPage from "../pages/LoginPage"
 import UserPage from "../pages/UserPage"
 import FilmsPage from "../pages/FilmsPage"
 import ItemPage from "../pages/ItemPage"
+import SeriesPage from "../pages/SeriesPage"
 
 export default function AppRoutes() {
   return (
@@ -13,6 +14,7 @@ export default function AppRoutes() {
         <Route path="/user" element={<UserPage/>} />
         <Route path="/films" element={<FilmsPage/>} />
         <Route path="/content" element={<ItemPage/>} />
+        <Route path="/series" element={<SeriesPage/>} />
     </Routes>
   )
 }

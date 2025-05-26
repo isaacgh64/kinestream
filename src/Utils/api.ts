@@ -22,9 +22,13 @@ export class API {
                 return true;
             } else if (data.code === 401) {
                 Globals.messageError = "Los datos introducidos no son correctos";
-            } else if (data.code === 404) {
+            } else if (data.code === 409) {
                 Globals.messageError = "No existe ninguna cuenta con ese correo electrónico, primero cree una cuenta";
-            } else {
+            }else if (data.code === 405) {
+                Globals.messageError = "Algo fue mal";
+            }else if (data.code === 500) {
+                Globals.messageError = "El servidor no funcionó correctamente";
+            }else {
                 Globals.messageError = "dialog";
             }
             return false;
