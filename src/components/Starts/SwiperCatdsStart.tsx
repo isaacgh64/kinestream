@@ -1,20 +1,18 @@
-
-import Cards from './Cards';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRef, useState } from "react";
 import 'swiper/swiper-bundle.css';
-import Films from '../../models/films';
+import Starts from '../../models/starts';
+import Start from './Start';
 
 
 
 type SwiperCardsProps = {
-    title: string,
-    list:Films[]
+    list:Starts[]
 }
 
-export default function SwiperCards({title,list}:SwiperCardsProps) {
+export default function SwiperCardsStart({list}:SwiperCardsProps) {
   
       const [index,setIndex] = useState(0)
       const swiperRef = useRef<SwiperType | null>(null)
@@ -33,8 +31,7 @@ export default function SwiperCards({title,list}:SwiperCardsProps) {
         }
       };
     return (
-        <section className="max-w-6xl mx-auto py-3">
-            <h3 className="text-3xl text-blue-500 font-bold">{title}</h3>
+        <section className="max-w-6xl mx-auto">
             <div className="flex flex-row items-center">
               <button className="swiper-button-prev-custom bg-white border border-blue-500 text-blue-500 p-2 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition duration-300 h-11 me-2 disabled:opacity-0" onClick={decrementIndex} disabled={(index == 0)?true:false}>
                 <ChevronLeft size={24} />
@@ -47,7 +44,7 @@ export default function SwiperCards({title,list}:SwiperCardsProps) {
                     {
                       list.map((item,index) =>(
                         <SwiperSlide key={index}>
-                            <Cards
+                            <Start
                                 key={`${index} / ${item}`}
                                 item={item}
                               />

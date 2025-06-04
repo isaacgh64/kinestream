@@ -21,12 +21,15 @@ export default function UserPage() {
             <UserForm/>
             <SwiperCarts
               title="Guardado para ver más tarde"
+               list={[]}
             />
             <SwiperCarts
               title="Tu contenido favorito"
+              list={[]}
             />
             <SwiperCarts
               title="Lo que has visto"
+              list={[]}
             />
           </div>
         </div>

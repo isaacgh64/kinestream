@@ -1,6 +1,9 @@
 import { Globals } from "./globals";
 import { TokenActions } from "../reducers/token-reducer";
 import User from "../models/user";
+import Films from "../models/films";
+import Film from "../models/film";
+import Starts from "../models/starts";
 
 export class API {
     //Login API
@@ -104,7 +107,7 @@ export class API {
     }
 
     //Modify data user
-    public static modifyDataUser(token : string, name:string, mail:string): Promise<Boolean> {
+    public static modifyDataUser(token : string, name:string, mail:string): Promise<boolean> {
         return fetch(Globals.serverUrl + "/modify_data_user.php", {
             method: "POST",
             headers: {
@@ -130,6 +133,78 @@ export class API {
             console.log(error);
             Globals.messageError = "Error de conexión con el servidor";
             return false; 
+        });
+    }
+
+    //Get Films in Cinema
+    public static getFilmsCinema():Promise<Films[]>{
+        return fetch(`${Globals.serverApi}3/movie/now_playing?api_key=${Globals.apiKey}&language=es&page=${Globals.pageApiFilmsCinema}`,{
+            method:"GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then(response => response.json())
+        .then(data => {
+           return data.results.map((item: any) => Films.fromJson(item));
+        })
+        .catch(error => {
+            console.log(error);
+           
+        });
+    }
+
+    //Get Films in Cinema
+    public static getFilmsPopular():Promise<Films[]>{
+        const threeMonthsAgo = new Date();
+        threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+        const formattedDate = threeMonthsAgo.toISOString().split('T')[0];
+        return fetch(`${Globals.serverApi}3/discover/movie?api_key=${Globals.apiKey}&language=es&sort_by=popularity.desc&release_date.lte=${formattedDate}&page=${Globals.pageApiFilmsCinema}`,{
+            method:"GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then(response => response.json())
+        .then(data => {
+           return data.results.map((item: any) => Films.fromJson(item));
+        })
+        .catch(error => {
+            console.log(error);
+           
+        });
+    }
+
+     //Get Specified item
+     public static getStreamDetail(id:number):Promise<Film>{
+         return fetch(`${Globals.serverApi}3/movie/${id}?api_key=${Globals.apiKey}&language=es&sort_by=popularity.desc&page=${Globals.pageApiFilmsCinema}`,{
+            method:"GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then(response => response.json())
+        .then(data => {
+           return Film.fromJson(data)
+        })
+        .catch(error => {
+            console.log(error)
+            throw error
+           
+        });
+     }
+
+     //Get Films in Cinema
+    public static getStarts(id:number, type:string):Promise<Starts[]>{
+        return fetch(`${Globals.serverApi}3/${type}/${id}/credits?api_key=${Globals.apiKey}`,{
+            method:"GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then(response => response.json())
+        .then(data => {
+           return data.cast.map((item: any) => Starts.fromJson(item));
+        })
+        .catch(error => {
+            console.log(error);
+            throw error
         });
     }
 
