@@ -22,7 +22,7 @@ export default function Cards({ item }: CardsType) {
         className="sm:max-w-xs inline-block bg-white overflow-hidden rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 mt-6 me-3 w-40"
       >
       <img
-        src={`https://image.tmdb.org/t/p/w500/${item.profilePath}`}
+        src={(item?.profilePath?.trim())?`https://image.tmdb.org/t/p/w500/${item.profilePath}`:Globals.noPhoto}
         alt={`Actor/Actriz ${item.name}`}
         className="object-cover w-40 h-50"
       />

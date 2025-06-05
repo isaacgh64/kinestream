@@ -9,16 +9,31 @@ import Films from "../models/films";
 export default function HomePage() {
   const [filmsCinema, setFilmsCinema] = useState<Films[]>([]);
   const [filmsPopular, setFilmsPopular] = useState<Films[]>([]);
+  const [nextCinema,setNextCinema] = useState<number>(1);
+  const [nextPopular,setNextPopular] = useState<number>(1);
+  const [loading, setLoading] = useState(false);
+  
   useEffect(()=>{
-      API.getFilmsCinema().then(value=>{
-        setFilmsCinema(value)
+    if(!loading){
+      console.log("pruebas")
+      setLoading(true)
+      API.getFilmsCinema(nextCinema).then(value=>{
+        setFilmsCinema(prev => [...prev,...value])
+        setLoading(false)
       })
-    },[])
+    }
+      
+    },[nextCinema])
   useEffect(()=>{
-      API.getFilmsPopular().then(value=>{
-        setFilmsPopular(value)
+    if(!loading){
+      setLoading(true)
+      API.getFilmsPopular(nextPopular).then(value=>{
+        setFilmsPopular(prev => [...prev,...value])
+        setLoading(false)
       })
-    },[])
+    }
+      
+    },[nextPopular])
   return (
     <div className="bg-neutral-50">
       <div className="w-full min-h-[calc(100vh-120px)] flex justify-center bg-neutral-50">
@@ -43,14 +58,14 @@ export default function HomePage() {
           </section>
           {filmsCinema.length > 0 ? (
             <>
-              <SwiperCarts title="Solo en cines 🍿" list={filmsCinema} />
+              <SwiperCarts title="Solo en cines 🍿" list={filmsCinema} setNext={setNextCinema}/>
             </>
           ) : (
             <p>Cargando películas...</p>
           )}
           {filmsPopular.length > 0 ? (
             <>
-              <SwiperCarts title="Lo más visto 🍿" list={filmsPopular} />
+              <SwiperCarts title="Lo más visto 🍿" list={filmsPopular} setNext={setNextPopular}/>
             </>
           ) : (
             <p>Cargando películas...</p>

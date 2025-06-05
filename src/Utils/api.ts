@@ -137,8 +137,8 @@ export class API {
     }
 
     //Get Films in Cinema
-    public static getFilmsCinema():Promise<Films[]>{
-        return fetch(`${Globals.serverApi}3/movie/now_playing?api_key=${Globals.apiKey}&language=es&page=${Globals.pageApiFilmsCinema}`,{
+    public static getFilmsCinema(page:number):Promise<Films[]>{
+        return fetch(`${Globals.serverApi}3/movie/now_playing?api_key=${Globals.apiKey}&language=es&page=${page}`,{
             method:"GET",
             headers: {
                 "Content-Type": "application/json",
@@ -154,11 +154,11 @@ export class API {
     }
 
     //Get Films in Cinema
-    public static getFilmsPopular():Promise<Films[]>{
+    public static getFilmsPopular(page:number):Promise<Films[]>{
         const threeMonthsAgo = new Date();
         threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
         const formattedDate = threeMonthsAgo.toISOString().split('T')[0];
-        return fetch(`${Globals.serverApi}3/discover/movie?api_key=${Globals.apiKey}&language=es&sort_by=popularity.desc&release_date.lte=${formattedDate}&page=${Globals.pageApiFilmsCinema}`,{
+        return fetch(`${Globals.serverApi}3/discover/movie?api_key=${Globals.apiKey}&language=es&sort_by=popularity.desc&release_date.lte=${formattedDate}&page=${page}`,{
             method:"GET",
             headers: {
                 "Content-Type": "application/json",
@@ -175,7 +175,7 @@ export class API {
 
      //Get Specified item
      public static getStreamDetail(id:number):Promise<Film>{
-         return fetch(`${Globals.serverApi}3/movie/${id}?api_key=${Globals.apiKey}&language=es&sort_by=popularity.desc&page=${Globals.pageApiFilmsCinema}`,{
+         return fetch(`${Globals.serverApi}3/movie/${id}?api_key=${Globals.apiKey}&language=es`,{
             method:"GET",
             headers: {
                 "Content-Type": "application/json",
@@ -217,7 +217,12 @@ export class API {
             },
         }).then(response => response.json())
         .then(data => {
-           return data.results[0].key
+            if(data.results.length>0){
+                return data.results[0].key
+            }else{
+                return ""
+            }
+           
         })
         .catch(error => {
             console.log(error);
