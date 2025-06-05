@@ -27,7 +27,7 @@ export default function Cards({ item }: CardsType) {
         className="object-cover w-full h-80 sm:h-96"
       />
       <div className="px-3 py-2 sm:px-4 sm:py-3 text-center border-t border-gray-200 bg-gray-50 h-[84px] sm:h-[96px] flex flex-col justify-center">
-        <h4 className="font-semibold text-sm sm:text-base text-gray-900 leading-tight line-clamp-1">
+        <h4 className="font-semibold text-sm sm:text-base text-gray-900 leading-tight line-clamp-2">
           {item.title}
         </h4>
         <p className="text-xs sm:text-sm text-gray-500 leading-tight line-clamp-1">

@@ -208,4 +208,21 @@ export class API {
         });
     }
 
+    //Get Trailer
+    public static getTrailer(id:number, type:string):Promise<string>{
+        return fetch(`${Globals.serverApi}3/${type}/${id}/videos?api_key=${Globals.apiKey}&language=es`,{
+            method:"GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then(response => response.json())
+        .then(data => {
+           return data.results[0].key
+        })
+        .catch(error => {
+            console.log(error);
+            throw error
+        });
+    }
+
 }

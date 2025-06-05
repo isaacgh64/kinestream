@@ -37,9 +37,9 @@ export default function SwiperCardsStart({list}:SwiperCardsProps) {
                 <ChevronLeft size={24} />
               </button>
               <Swiper breakpoints={{
-                0: { slidesPerView: 2, spaceBetween:6 },  
-                640: { slidesPerView: 3,spaceBetween:8  },  
-                1024: { slidesPerView: 4,spaceBetween:12  }  
+                0: { slidesPerView: 2, spaceBetween:4 },  
+                640: { slidesPerView: 3,spaceBetween:4  },  
+                1024: { slidesPerView: 6,spaceBetween:4  }  
               }} onSwiper={(swiper) => (swiperRef.current = swiper)}onSlideChange={(swiper) => setIndex(swiper.realIndex)}>
                     {
                       list.map((item,index) =>(
