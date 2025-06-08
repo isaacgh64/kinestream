@@ -15,7 +15,6 @@ export default function HomePage() {
   
   useEffect(()=>{
     if(!loading){
-      console.log("pruebas")
       setLoading(true)
       API.getFilmsCinema(nextCinema).then(value=>{
         setFilmsCinema(prev => [...prev,...value])

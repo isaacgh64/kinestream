@@ -40,6 +40,7 @@ export default function SwiperCardsUser({title,list}:SwiperSeasonProps) {
                </button>
        
                <Swiper
+                className='w-full'
                  breakpoints={{
                    0: { slidesPerView: 2, spaceBetween: 6 },
                    640: { slidesPerView: 3, spaceBetween: 8 },
@@ -50,7 +51,7 @@ export default function SwiperCardsUser({title,list}:SwiperSeasonProps) {
                >
                  {list.map((item, i) => (
                    <SwiperSlide key={i} className='!w-62 flex-shrink-0'>
-                     <Cards key={`${i} / ${item}`} item={item} />
+                     <Cards key={`${i} / ${item}`} item={item} type='movie'/>
                    </SwiperSlide>
                  ))}
                </Swiper>

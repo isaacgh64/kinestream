@@ -11,6 +11,7 @@ export default function UserPage() {
     const {token} = useToken()
     const navigate = useNavigate();
     const [films,setFilms] = useState<Films[]>([])
+    const [favs,setFavs] = useState<Films[]>([])
     
     useEffect(()=>{
       if(token.token===""){
@@ -21,6 +22,12 @@ export default function UserPage() {
             setFilms(value1)
           })
         })
+
+        API.getIdListFav(token.token).then(value=>{
+          API.getFilmsList(value).then(value1=>{
+            setFavs(value1)
+          })
+        })
       }
     },[token.token,navigate])
     
@@ -29,18 +36,19 @@ export default function UserPage() {
           <div className="w-full max-w-7xl bg-white px-6 py-6 shadow-lg rounded-2xl">
             <h2 className="text-2xl font-bold text-blue-600 mb-4 text-center">Perfil de Usuario</h2>
             <UserForm/>
-            <SwiperCardsUser
-              title="Guardado para ver más tarde"
-              list={films}
-            />
-            {/* <SwiperCarts
-              title="Guardado para ver más tarde"
-               list={[]}
-            />
-            <SwiperCarts
-              title="Tu contenido favorito"
-              list={[]}
-            /> */}
+            {films.length>0?
+              <SwiperCardsUser
+                title="Guardado para ver más tarde"
+                list={films}
+              />
+            :<p></p>}
+
+            {favs.length>0?
+              <SwiperCardsUser
+                title="Películas favoritas"
+                list={favs}
+              />
+            :<p></p>}
           </div>
         </div>
     )

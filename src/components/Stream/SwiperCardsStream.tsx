@@ -78,6 +78,7 @@ export default function SwiperCardsPlatformStream({ title, id, type,genre }: Swi
             </button>
 
             <Swiper
+              className='w-full'
               breakpoints={{
                 0: { slidesPerView: 2, spaceBetween: 6 },
                 640: { slidesPerView: 3, spaceBetween: 8 },
@@ -87,8 +88,8 @@ export default function SwiperCardsPlatformStream({ title, id, type,genre }: Swi
               onSlideChange={onSlideChangeHandler}
             >
               {list.map((item, i) => (
-                <SwiperSlide key={i} className='!w-62 flex-shrink-0'>
-                  <Cards key={`${i} / ${item}`} item={item} />
+                <SwiperSlide key={i} className='w-48 sm:w-56 md:w-62 lg:w-72 xl:w-80 flex-shrink-0'>
+                  <Cards key={`${i} / ${item}`} item={item} type={type}/>
                 </SwiperSlide>
               ))}
             </Swiper>

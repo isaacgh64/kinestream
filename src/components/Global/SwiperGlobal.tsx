@@ -37,33 +37,42 @@ export default function SwiperSeason({listStarts,listSeason,type}:SwiperSeasonPr
               <button className="swiper-button-prev-custom bg-white border border-blue-500 text-blue-500 p-2 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition duration-300 h-11 me-2 disabled:opacity-0" onClick={decrementIndex} disabled={(index == 0)?true:false}>
                 <ChevronLeft size={24} />
               </button>
-              <Swiper breakpoints={{
+              <Swiper className='w-full' breakpoints={{
                 0: { slidesPerView: 2, spaceBetween:4 },  
                 640: { slidesPerView: 3,spaceBetween:4  },  
                 1024: { slidesPerView: 6,spaceBetween:4  }  
               }} onSwiper={(swiper) => (swiperRef.current = swiper)}onSlideChange={(swiper) => setIndex(swiper.realIndex)}>
                     {
                         (type==='starts')?
+                        <div className='w-full'>
+                          {
                             listStarts?.map((item,index) =>(
                                 <SwiperSlide 
-                                className='!w-42 flex-shrink-0'
+                                className='w-48 sm:w-56 md:w-62 lg:w-72 xl:w-80 flex-shrink-0'
                                 key={index}>
-                                    
                                     <Start
                                         key={`${index} / ${item}`}
                                         item={item}
                                     />
                                 </SwiperSlide>
                             ))
+                          }
+                        </div>
+                            
                         :
-                         listSeason?.map((item,index) =>(
-                                <SwiperSlide key={index} className='!w-42 flex-shrink-0'>
+                        <div className='w-full'>
+                          {
+                            listSeason?.map((item,index) =>(
+                                <SwiperSlide key={index} className='w-48 sm:w-56 md:w-62 lg:w-72 xl:w-80 flex-shrink-0'>
                                     <SeasonCards
                                         key={`${index} / ${item}`}
                                         item={item}
                                     />
                                 </SwiperSlide>
                             ))
+                          }
+                        </div>
+                         
                     }
               </Swiper>
               <button className="swiper-button-next-custom  bg-white border border-blue-500 text-blue-500 p-2 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition duration-300 h-11 ms-2  disabled:opacity-0" onClick={incrementIndex}  disabled={index >= listLength - 6} >

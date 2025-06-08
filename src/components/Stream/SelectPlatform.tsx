@@ -24,27 +24,23 @@ export default function SwiperCardsStream({title,type}:SwiperCardsStreamProps) {
         },[type])
       
     return (
-      <>
-        {elements.length>0?
-          <section className="text-center py-2">
-              <h2 className="text-4xl font-bold text-sky-600 mb-2 ms-40 me-40">{`Selecciona la plataforma donde quieres ver las ${title} disponibles`}</h2>
-              {(elements.length<0)?<p></p>:<div className="flex flex-wrap gap-6 justify-center mt-10">
-            
-              {elements.map((item,index) =>(
-                            
-                <CardsStream
-                    key={`${index} / ${item}`}
-                    item = {item}
-                />
-                          
-              ))}
-            </div>}
-          </section>
-        :<Charging/>}
-        
-          
-        
-        
+    <>
+      {elements.length > 0 ? (
+        <section className="text-center py-4 px-4 sm:px-8">
+          <h2 className="text-2xl sm:text-4xl font-bold text-sky-600 mb-4 mx-auto max-w-xl sm:max-w-2xl">
+            {`Selecciona la plataforma donde quieres ver las ${title} disponibles`}
+          </h2>
+
+          <div className="flex flex-wrap gap-4 sm:gap-6 justify-center mt-6 sm:mt-10">
+            {elements.map((item, index) => (
+              <CardsStream key={`${index} / ${item}`} item={item} />
+            ))}
+          </div>
+        </section>
+      ) : (
+        <Charging />
+      )}
     </>
+
   )
 }

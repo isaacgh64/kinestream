@@ -1,46 +1,70 @@
 import { useEffect, useState } from 'react';
-import { Globals } from '../Utils/globals';
 import Film from '../models/film';
 import { API } from '../Utils/api';
 import Starts from '../models/starts';
-import { FaHeart, FaClock, FaShareAlt } from "react-icons/fa";
+import { FaHeart, FaClock, FaShareAlt, FaArrowLeft } from "react-icons/fa";
 import Charging from '../components/Global/Charging';
 import { useStream } from '../hooks/useStream';
 import ItemSeason from '../components/TV/ItemSeason';
 import ItemFilm from '../components/Films/ItemFilm';
 import TVDetail from '../models/tvDetail';
 import { useToken } from '../hooks/useToken';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function ItemPage() {
   const {state} = useStream()
   const {token} = useToken()
+  const navigate = useNavigate();
   const [itemFilm, setItemFilm] = useState<Film>()
   const [itemTV, setItemTV] = useState<TVDetail>()
   const [start, setStart] = useState<Starts[]>([])
   const [key, setKey] = useState<string>("")
   const [charge,setCharge] = useState<boolean>(true)
   const [isShow,setIsShow] = useState<boolean>(false)
+  const [isFav,setIsFav] = useState<boolean>(false)
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get('id');
+  const type = searchParams.get('type');
+  const loc = useLocation();
   useEffect(()=>{
-    API.getStreamDetail(Globals.idItem,state.type).then(value=>{
-      if(state.type==='movie'){
-        setItemFilm(value)
-        API.getIdListShow(token.token).then(value1=>{
-          API.checkItemFilm(value1,value.id).then(value2=>{
-            setIsShow(value2)
+   
+    console.log(type)
+    if(id?.trim()){
+      var idint = 0
+      try{
+        idint = parseInt(id??'870028')
+      }catch(e){
+        idint = 870028
+      }
+       API.getStreamDetail(idint,(type==="tv")?type:state.type).then(value=>{
+        if(state.type==='movie'&&type!=="tv"){
+          setItemFilm(value)
+          API.getIdListShow(token.token).then(value1=>{
+            API.checkItemFilm(value1,value.id).then(value2=>{
+              setIsShow(value2)
+            })
+          })
+        API.getIdListFav(token.token).then(value1=>{
+            API.checkItemFilm(value1,value.id).then(value2=>{
+              setIsFav(value2)
+            })
+          })
+        }else{
+          setItemTV(value)
+        }
+        API.getStarts(idint,(type==="tv")?type:state.type).then(value=>{
+          setStart(value)
+          API.getTrailer(idint,(type==="tv")?type:state.type).then(value=>{
+            setKey(value)
+            setCharge(false)
           })
         })
-      }else{
-        setItemTV(value)
-      }
-      API.getStarts(Globals.idItem,state.type).then(value=>{
-        setStart(value)
-        API.getTrailer(Globals.idItem,state.type).then(value=>{
-          setKey(value)
-          setCharge(false)
-        })
-      })
     })
      window.scrollTo(0, 0);
+    }else{
+       navigate("/");
+    }
+   
   },[])
 
   function saveMovieShow(){
@@ -58,11 +82,36 @@ export default function ItemPage() {
       })
     })
   }
+
+  function saveMovieFav(){
+    API.getIdListFav(token.token).then(value=>{
+      API.insertItemFilm(value,itemFilm?.id ?? 0).then(()=>{
+        setIsFav(true)
+      })
+    })
+  }
+
+  function removeMovieFav(){
+    API.getIdListFav(token.token).then(value=>{
+      API.removeItemFilm(value,itemFilm?.id ?? 0).then(()=>{
+        setIsFav(false)
+      })
+    })
+  }
   return (
     <>
     {!charge?
     <div className="bg-white text-gray-900 min-h-screen flex justify-center relative">
-      {(state.type==='movie')?
+      {/*Botón para ir a la página anterior*/}
+     <button
+        className="absolute top-2 left-2 bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full shadow-lg transition-transform transform hover:scale-110 z-50"
+        onClick={() => navigate(-1)}
+      >
+        <FaArrowLeft size={20} />
+      </button>
+      
+
+      {(state.type==='movie' && type!=='tv')?
         <ItemFilm 
           item={itemFilm}
           start={start}
@@ -79,22 +128,23 @@ export default function ItemPage() {
     {/* BOTONES FLOTANTES */}
     <div className="fixed bottom-6 right-6 flex flex-col items-center space-y-4 z-50">
       {/* Favoritos */}
-      {(state.type==="movie")?
+      {(state.type==='movie' && type!=='tv')?
         <div className="relative group">
           <button
-            onClick={() => console.log("Añadido a favoritos")}
-            className="bg-red-500 hover:bg-red-600 text-white p-4 rounded-full shadow-lg transition-transform transform group-hover:scale-110"
+            onClick={() => (!isFav)?saveMovieFav():removeMovieFav()}
+            className={(isFav)?`bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-transform transform group-hover:scale-110`:`bg-red-500 hover:bg-red-600 text-white p-4 rounded-full shadow-lg transition-transform transform group-hover:scale-110`}
           >
             <FaHeart size={20} />
           </button>
-          <span className="absolute right-full mr-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            Añadir a Favoritos
+          <span className="absolute right-full mr-2 px-4 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+           {(isFav)?`Quitar favorito`:`Añadir favorito`}
           </span>
         </div>
       :<p></p>
       }
+      
        {/* Ver más tarde */}
-      {(state.type==="movie")?
+      {(state.type==='movie' && type!=='tv')?
         <div className="relative group">
           <button
             onClick={() => (!isShow)?saveMovieShow():removeMovieShow()}
