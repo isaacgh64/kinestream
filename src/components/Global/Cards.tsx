@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import Films from "../../models/films";
 import { Globals } from "../../Utils/globals";
+import TV from "../../models/tv";
 
 
 type CardsType={
-  item:Films
+  item:Films|TV
 }
 
 export default function Cards({ item }: CardsType) {
@@ -22,7 +23,7 @@ export default function Cards({ item }: CardsType) {
       className="inline-block w-48 sm:w-60 bg-white overflow-hidden rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 mt-6 me-3 cursor-pointer"
     >
       <img
-        src={`https://image.tmdb.org/t/p/w500/${item.posterPath}`}
+        src={`https://image.tmdb.org/t/p/w1280/${item.posterPath}`}
         alt={`Póster de la película ${item.title}`}
         className="object-cover w-full h-80 sm:h-96"
       />

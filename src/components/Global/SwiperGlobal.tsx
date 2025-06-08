@@ -4,16 +4,18 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRef, useState } from "react";
 import 'swiper/swiper-bundle.css';
 import Starts from '../../models/starts';
-import Start from './Start';
+import Season from '../../models/seasons';
+import Start from '../Starts/Start';
+import SeasonCards from '../TV/SeasonCards';
 
-
-
-type SwiperCardsProps = {
-    list:Starts[]
+type SwiperSeasonProps = {
+    listStarts?:Starts[]
+    listSeason?:Season[]
+    type:string
 }
 
-export default function SwiperCardsStart({list}:SwiperCardsProps) {
-  
+export default function SwiperSeason({listStarts,listSeason,type}:SwiperSeasonProps) {
+      const listLength:number = (listSeason?.length??0 >0)?listSeason?.length ?? 0:listStarts?.length ?? 0
       const [index,setIndex] = useState(0)
       const swiperRef = useRef<SwiperType | null>(null)
       const incrementIndex = () => {
@@ -42,17 +44,30 @@ export default function SwiperCardsStart({list}:SwiperCardsProps) {
                 1024: { slidesPerView: 6,spaceBetween:4  }  
               }} onSwiper={(swiper) => (swiperRef.current = swiper)}onSlideChange={(swiper) => setIndex(swiper.realIndex)}>
                     {
-                      list.map((item,index) =>(
-                        <SwiperSlide key={index}>
-                            <Start
-                                key={`${index} / ${item}`}
-                                item={item}
-                              />
-                        </SwiperSlide>
-                      ))
+                        (type==='starts')?
+                            listStarts?.map((item,index) =>(
+                                <SwiperSlide 
+                                className='!w-42 flex-shrink-0'
+                                key={index}>
+                                    
+                                    <Start
+                                        key={`${index} / ${item}`}
+                                        item={item}
+                                    />
+                                </SwiperSlide>
+                            ))
+                        :
+                         listSeason?.map((item,index) =>(
+                                <SwiperSlide key={index} className='!w-42 flex-shrink-0'>
+                                    <SeasonCards
+                                        key={`${index} / ${item}`}
+                                        item={item}
+                                    />
+                                </SwiperSlide>
+                            ))
                     }
               </Swiper>
-              <button className="swiper-button-next-custom  bg-white border border-blue-500 text-blue-500 p-2 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition duration-300 h-11 ms-2  disabled:opacity-0" onClick={incrementIndex} disabled={(index == list.length-4)?true:false} >
+              <button className="swiper-button-next-custom  bg-white border border-blue-500 text-blue-500 p-2 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition duration-300 h-11 ms-2  disabled:opacity-0" onClick={incrementIndex}  disabled={index >= listLength - 6} >
                 <ChevronRight size={25} />
               </button>
             </div>

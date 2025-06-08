@@ -1,14 +1,15 @@
-import Genres from './genres';
-import Season from './seasons';
-export default class Film {
+import Genres from "./genres"
+import Season from "./seasons"
+
+export default class TVDetail {
     id: number
     title: string
     posterPath: string
     originalTitle: string
     backdropPath: string
     overview: string
-    releaseDate: string
     genres:Genres[]
+    releaseDate: string
     seasons:Season[]
 
     constructor(
@@ -18,9 +19,10 @@ export default class Film {
         originalTitle: string,
         backdropPath: string,
         overview: string,
+        genres: Genres[],
         releaseDate: string,
-        genres:Genres[],
         seasons:Season[]
+        
     ) {
         this.id = id
         this.title = title
@@ -28,35 +30,33 @@ export default class Film {
         this.originalTitle = originalTitle
         this.backdropPath = backdropPath
         this.overview = overview
-        this.releaseDate = releaseDate
         this.genres = genres
-        this.seasons = seasons
+        this.releaseDate = releaseDate
+        this.seasons=seasons
     }
 
-    static fromJson(json: any): Film {
-        return new Film(
+    static fromJson(json: any): TVDetail {
+        return new TVDetail(
             json.id,
-            json.title,
+            json.name,
             json.poster_path,
-            json.original_title,
+            json.original_name,
             json.backdrop_path,
             json.overview,
-            json.release_date,
             json.genres.map((genre: any) => Genres.fromJson(genre)),
-            json.season
+            json.release_date,
+            json.seasons.map((seasons: any) => Season.fromJson(seasons)),
         );
     }
 
     toJson(): any {
         return {
             id: this.id,
-            title: this.title,
+            name: this.title,
             poster_path: this.posterPath,
             original_title: this.originalTitle,
             backdrop_path: this.backdropPath,
             overview: this.overview,
-            release_date: this.releaseDate,
-            genres: this.genres.map(g => g.toJson())
         };
     }
 }

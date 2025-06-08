@@ -33,14 +33,14 @@ export default function SwiperCards({ title, list, setNext }: SwiperCardsProps) 
   const incrementIndex = () => {
     if (swiperRef.current) {
       swiperRef.current.slideNext();
-      // No hacemos setIndex aquí para evitar desfases
+      
     }
   };
 
   const decrementIndex = () => {
     if (swiperRef.current) {
       swiperRef.current.slidePrev();
-      // Tampoco aquí, actualizamos el índice en onSlideChange
+      
     }
   };
 
@@ -66,7 +66,7 @@ export default function SwiperCards({ title, list, setNext }: SwiperCardsProps) 
           onSlideChange={onSlideChangeHandler}
         >
           {list.map((item, i) => (
-            <SwiperSlide key={i}>
+            <SwiperSlide key={i} className='!W-62 flex-shrink-0'>
               <Cards key={`${i} / ${item}`} item={item} />
             </SwiperSlide>
           ))}

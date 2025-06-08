@@ -4,6 +4,10 @@ import User from "../models/user";
 import Films from "../models/films";
 import Film from "../models/film";
 import Starts from "../models/starts";
+import Platform from "../models/platform";
+import Genres from "../models/genres";
+import TV from "../models/tv";
+import TVDetail from "../models/tvDetail";
 
 export class API {
     //Login API
@@ -138,7 +142,7 @@ export class API {
 
     //Get Films in Cinema
     public static getFilmsCinema(page:number):Promise<Films[]>{
-        return fetch(`${Globals.serverApi}3/movie/now_playing?api_key=${Globals.apiKey}&language=es&page=${page}`,{
+        return fetch(`${Globals.serverApi}3/movie/now_playing?api_key=${Globals.apiKey}&language=es&page=${page}&watch_region=ES`,{
             method:"GET",
             headers: {
                 "Content-Type": "application/json",
@@ -158,7 +162,7 @@ export class API {
         const threeMonthsAgo = new Date();
         threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
         const formattedDate = threeMonthsAgo.toISOString().split('T')[0];
-        return fetch(`${Globals.serverApi}3/discover/movie?api_key=${Globals.apiKey}&language=es&sort_by=popularity.desc&release_date.lte=${formattedDate}&page=${page}`,{
+        return fetch(`${Globals.serverApi}3/discover/movie?api_key=${Globals.apiKey}&language=es&sort_by=popularity.desc&release_date.lte=${formattedDate}&page=${page}&watch_region=ES`,{
             method:"GET",
             headers: {
                 "Content-Type": "application/json",
@@ -174,15 +178,20 @@ export class API {
     }
 
      //Get Specified item
-     public static getStreamDetail(id:number):Promise<Film>{
-         return fetch(`${Globals.serverApi}3/movie/${id}?api_key=${Globals.apiKey}&language=es`,{
+     public static getStreamDetail(id:number,type:string):Promise<Film|TVDetail>{
+         return fetch(`${Globals.serverApi}3/${type}/${id}?api_key=${Globals.apiKey}&language=es`,{
             method:"GET",
             headers: {
                 "Content-Type": "application/json",
             },
         }).then(response => response.json())
         .then(data => {
-           return Film.fromJson(data)
+            if(type==="movie"){
+                return Film.fromJson(data)
+            }else{
+                return TVDetail.fromJson(data)
+            }
+           
         })
         .catch(error => {
             console.log(error)
@@ -193,7 +202,7 @@ export class API {
 
      //Get Films in Cinema
     public static getStarts(id:number, type:string):Promise<Starts[]>{
-        return fetch(`${Globals.serverApi}3/${type}/${id}/credits?api_key=${Globals.apiKey}`,{
+        return fetch(`${Globals.serverApi}3/${type}/${id}/credits?api_key=${Globals.apiKey}&watch_region=ES`,{
             method:"GET",
             headers: {
                 "Content-Type": "application/json",
@@ -229,5 +238,63 @@ export class API {
             throw error
         });
     }
+
+    //Get Platforms
+    public static getPlatforms(type:string):Promise<Platform[]>{
+        return fetch(`${Globals.serverApi}3/watch/providers/${type}?api_key=${Globals.apiKey}&watch_region=ES`,{
+            method:"GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then(response => response.json())
+        .then(data => {
+           return data.results.map((item: any) => Platform.fromJson(item));
+        })
+        .catch(error => {
+            console.log(error);
+            throw error
+        });
+    }
+
+    //Get Genres Stream
+    public static getGenresPlatforms(type:string):Promise<Genres[]>{
+        return fetch(`${Globals.serverApi}3/genre/${type}/list?api_key=${Globals.apiKey}&language=es`,{
+            method:"GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then(response => response.json())
+        .then(data => {
+           return data.genres.map((item: any) => Genres.fromJson(item));
+        })
+        .catch(error => {
+            console.log(error);
+            throw error
+        });
+    }
+
+    //Get Film Stream Genre
+    public static getStreamPlatformsGenres(type:string,idStream:number,idGenre:number,page:number):Promise<Films[]|TV[]>{
+        return fetch(`${Globals.serverApi}3/discover/${type}?api_key=${Globals.apiKey}&language=es&sort_by=vote_count_desc&watch_region=ES&with_watch_providers=${idStream}&with_genres=${idGenre}&page=${page}`,{
+            method:"GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then(response => response.json())
+        .then(data => {
+            if(type==="movie"){
+                return data.results.map((item: any) => Films.fromJson(item));
+            }else{
+                return data.results.map((item: any) => TV.fromJson(item));
+            }
+           
+        })
+        .catch(error => {
+            console.log(error);
+            throw error
+        });
+    }
+
+
 
 }
