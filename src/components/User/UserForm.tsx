@@ -10,7 +10,7 @@ export default function UserForm() {
     const [editing, setEditing] = useState(false);
     const [message, setMessage] = useState("");
     const [visible, setVisible] = useState(false);
-    const {state, dispatch} = useToken()
+    const {token, dispatch} = useToken()
     const navigate = useNavigate();
     const [user, setUser] = useState<UserType>({
         name:"",
@@ -28,7 +28,7 @@ export default function UserForm() {
     //Cargamos nuestros datos antes de cargar la pantalla
     useEffect(()=>{
       async function getDataUser(){
-        await API.getDataUser(state.token).then(value => {
+        await API.getDataUser(token.token).then(value => {
           console.log(value)
             setUser({
               name:(value!=null)?value.name:"",
@@ -45,7 +45,7 @@ export default function UserForm() {
         Globals.messageError="Los campos no pueden estar vacíos";
          setVisible(true)
       }else{
-        await API.modifyDataUser(state.token,user.name,user.mail).then(value=>{
+        await API.modifyDataUser(token.token,user.name,user.mail).then(value=>{
           if(value){
             setEditing(false)
             setMessage("Datos actualizados");

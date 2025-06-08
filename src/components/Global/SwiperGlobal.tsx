@@ -19,7 +19,6 @@ export default function SwiperSeason({listStarts,listSeason,type}:SwiperSeasonPr
       const [index,setIndex] = useState(0)
       const swiperRef = useRef<SwiperType | null>(null)
       const incrementIndex = () => {
-        console.log(swiperRef.current?.realIndex)
         if (swiperRef.current) {
           swiperRef.current.slideNext();
           setIndex(swiperRef.current.realIndex)

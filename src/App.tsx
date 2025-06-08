@@ -7,10 +7,10 @@ import { useEffect } from "react";
 
 
 export default function App() {
-    const {state} = useToken()
+    const {token} = useToken()
     useEffect(() => {
-      localStorage.setItem('TOKEN',state.token)
-    },[state])
+      localStorage.setItem('TOKEN',token.token)
+    },[token])
     return (
           <BrowserRouter>
             <TopMenu/>

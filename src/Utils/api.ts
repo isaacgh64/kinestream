@@ -62,9 +62,16 @@ export class API {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.code === 201) {   
-                dispatch({type:"add-token",payload:{token:data.token}})
-                return true;
+            if (data.code === 201) {
+                API.createList(`${mail}`,`Ver más tarde`).then(value=>{
+                    API.createList(`${mail}`,`Favoritos`).then(value1=>{
+                        API.insertList(value,value1,data.token).then(value=>{
+                            console.log(value)
+                            dispatch({type:"add-token",payload:{token:data.token}})
+                            return true;
+                        })
+                    })
+                })
             } else if (data.code === 400) {
                 Globals.messageError = "Los datos no son correctos";
             }else if (data.code === 409) {
@@ -73,6 +80,33 @@ export class API {
                 Globals.messageError = "Algo fue mal, intentelo más tarde";
             } else {
                 Globals.messageError = "dialog";
+            }
+            return false;
+        })
+        .catch(error => {
+            console.log(error);
+            Globals.messageError = "Error de conexión con el servidor";
+            return false; 
+        });
+    }
+
+    //Register a new accountç
+    public static insertList(idFav : number, idShow : number,token:string): Promise<boolean> {
+        return fetch(Globals.serverUrl + "/insert_list.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                token: token,
+                idFav: idFav,
+                idShow: idShow,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.code === 201) {
+                return true
             }
             return false;
         })
@@ -294,6 +328,182 @@ export class API {
             throw error
         });
     }
+
+    
+    //Create list of movie at tv
+    public static createList(name:string,description:string):Promise<number>{
+        return fetch(`${Globals.serverApi}3/list`,{
+            method:"POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${Globals.token}`
+            },
+            body: JSON.stringify({
+                "name": `${name}`,
+                "language": "es",
+                "description": `${description}`,
+                "public": false
+            })
+        }).then(response => response.json())
+        .then(data => {
+            return data.list_id
+           
+        })
+        .catch(error => {
+            console.log(error);
+            throw error
+        });
+    }
+
+    //Get id List Show
+    public static getIdListShow(token:string):Promise<number>{
+        return fetch(`${Globals.serverUrl}/get_list_more.php`,{
+            method:"POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${Globals.token}`
+            },
+            body: JSON.stringify({
+                "token": `${token}`,
+            })
+        }).then(response => response.json())
+        .then(data => {
+            console.log(data.id)
+            return data.id
+        })
+        .catch(error => {
+            console.log(error);
+            throw error
+        });
+    }
+    //Get id List Fav
+    public static getIdListFav(token:string):Promise<number>{
+        return fetch(`${Globals.serverUrl}/get_list_fav.php`,{
+            method:"POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${Globals.token}`
+            },
+            body: JSON.stringify({
+                "token": `${token}`,
+            })
+        }).then(response => response.json())
+        .then(data => {
+            console.log(data.id)
+            return data.id
+        })
+        .catch(error => {
+            console.log(error);
+            throw error
+        });
+    }
+    //Insert item in a List
+    public static insertItemFilm(idList:number,idFilm:number):Promise<number>{
+        return fetch(`${Globals.serverApi}3/list/${idList}/add_item`,{
+            method:"POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${Globals.token}`
+            },
+            body: JSON.stringify({
+                "media_id": `${idFilm}`,
+            })
+        }).then(response => response.json())
+        .then(data => {
+            return data.status_code
+        })
+        .catch(error => {
+            console.log(error);
+            throw error
+        });
+    }
+
+    //Remove Movie List
+    public static removeItemFilm(idList: number, idFilm: number): Promise<number> {
+    return fetch(`${Globals.serverApi}3/list/${idList}/remove_item?api_key=${Globals.apiKey}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${Globals.token}`
+        },
+        body: JSON.stringify({
+            media_id: idFilm
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        return data.status_code;
+    })
+    .catch(error => {
+        console.log("Error al quitar ítem:", error);
+        throw error;
+    });
+}
+
+
+
+        public static checkItemFilm(idList: number, idFilm: number): Promise<boolean> {
+        return fetch(`${Globals.serverApi}3/list/${idList}/item_status?movie_id=${idFilm}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${Globals.token}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            return data.item_present;
+        })
+        .catch(error => {
+            console.log(error);
+            throw error;
+        });
+    }
+
+
+    //Get Films in Cinema
+    public static getFilmsList(idList:number):Promise<Films[]>{
+        return fetch(`${Globals.serverApi}3/list/${idList}?api_key=${Globals.apiKey}&language=es`,{
+            method:"GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then(response => response.json())
+        .then(data => {
+           return data.items.map((item: any) => Films.fromJson(item));
+        })
+        .catch(error => {
+            console.log(error);
+           
+        });
+    }
+
+    //Get Temporal token
+    public static createSessionId(requestToken: string): Promise<string> {
+    return fetch(`${Globals.serverApi}3/authentication/session/new?api_key=${Globals.apiKey}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            request_token: requestToken
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            return data.session_id;
+        } else {
+            throw new Error("No se pudo crear el session_id");
+        }
+    })
+    .catch(error => {
+        console.log(error);
+        throw error;
+    });
+}
+
+
 
 
 

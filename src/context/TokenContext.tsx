@@ -2,7 +2,7 @@ import { createContext, ReactNode, useReducer } from "react"
 import { initialState, TokenActions, tokenReducer, TokenState } from "../reducers/token-reducer"
 
 type TokenContextProps = {
-    state: TokenState
+    token: TokenState
     dispatch: React.Dispatch<TokenActions>
 }
 
@@ -14,10 +14,10 @@ export const TokenContext = createContext<TokenContextProps>(null!)
 
 export const TokenProvider = ({children} : TokenProvidersProps) => {
 
-    const [state,dispatch] = useReducer(tokenReducer,initialState)
+    const [token,dispatch] = useReducer(tokenReducer,initialState)
      
     return (
-        <TokenContext.Provider value={{state,dispatch}}>
+        <TokenContext.Provider value={{token,dispatch}}>
             {children}
         </TokenContext.Provider>
     )

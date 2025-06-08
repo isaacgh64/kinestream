@@ -80,15 +80,13 @@ export default function RegisterView() {
           setError('Las contraseñas no coinciden')
           return
       }
-    
-        API.register(register.name,register.mail,register.password,dispatch).then(value => {
-            if(value===true){
+         API.register(register.name,register.mail,register.password,dispatch).then(value3 => {
+            if(value3===true){
                 navigate("/user");
             }else{
                 setError(Globals.messageError);
-            }   
+                }   
         });
-    
     }
 
     return (

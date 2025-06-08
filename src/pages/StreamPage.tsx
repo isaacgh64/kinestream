@@ -12,6 +12,7 @@ export default function StreamPage() {
     const {state} = useStream()
     const [genres,setGenres] = useState<Genres[]>([])
     
+    
     useEffect(()=>{
         if(state.type.trim()){
             API.getGenresPlatforms(state.type).then(value=>{
@@ -40,14 +41,11 @@ export default function StreamPage() {
                                         title={item.name}
                                         id={state.id_stream}
                                         type={state.type}
-                                        genre={item.id}
-                                        
+                                        genre={item.id}   
                                    />
                                 ))}
                             </div>
                         }
-                        
-                        
                     </main>
                 </div>
             </div>
