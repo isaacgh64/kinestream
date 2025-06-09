@@ -1,3 +1,4 @@
+import { useState } from "react"
 import Starts from "../../models/starts"
 import TVDetail from "../../models/tvDetail"
 import { Globals } from "../../Utils/globals"
@@ -10,15 +11,27 @@ type ItemSeasonProps = {
     video:string
 }
 export default function ItemSeason({item,video,start}:ItemSeasonProps) {
+     const [isLoading, setIsLoading] = useState(true);
   return (
     <main className="w-full max-w-7xl bg-white shadow-2xl rounded-b-2xl overflow-hidden">
         {/* Imagen cabecera */}
+        
         <div className="aspect-video w-full">
-        <img
-            src={(item?.backdropPath?.trim()) ? `https://image.tmdb.org/t/p/w1280/${item?.backdropPath}` : Globals.noPhoto}
-            alt={`Póster de la película ${item?.title}`}
-            className="w-full h-full object-cover rounded-b-2xl"
-        />
+            <div>
+                {isLoading && (
+                    <img 
+                    src="/loading.gif"
+                    alt="Cargando..." 
+                    className="`w-full h-full object-cover rounded-b-2xl"
+                    />
+                )}
+                <img
+                     src={(item?.backdropPath?.trim()) ? `https://image.tmdb.org/t/p/w1280/${item.backdropPath}` : Globals.noPhoto}
+                    alt={`Póster de la película ${item?.title}`}
+                    className={`w-full h-full object-cover rounded-b-2xl ${isLoading ? 'hidden' : ''}`}
+                    onLoad={() => setIsLoading(false)}
+                />
+            </div>
         </div>
 
         <h1 className="text-center text-4xl sm:text-5xl font-bold mt-6 text-blue-500">

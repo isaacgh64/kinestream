@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 export default function ItemPage() {
   const {state} = useStream()
   const {token} = useToken()
+  const { search } = useLocation();
   const navigate = useNavigate();
   const [itemFilm, setItemFilm] = useState<Film>()
   const [itemTV, setItemTV] = useState<TVDetail>()
@@ -22,13 +23,10 @@ export default function ItemPage() {
   const [charge,setCharge] = useState<boolean>(true)
   const [isShow,setIsShow] = useState<boolean>(false)
   const [isFav,setIsFav] = useState<boolean>(false)
-  const searchParams = new URLSearchParams(location.search);
-  const id = searchParams.get('id');
-  const type = searchParams.get('type');
-  const loc = useLocation();
+  const query = new URLSearchParams(search)
+  const id = query.get("id")
+  const type = query.get("type")
   useEffect(()=>{
-   
-    console.log(type)
     if(id?.trim()){
       var idint = 0
       try{
@@ -39,16 +37,19 @@ export default function ItemPage() {
        API.getStreamDetail(idint,(type==="tv")?type:state.type).then(value=>{
         if(state.type==='movie'&&type!=="tv"){
           setItemFilm(value)
-          API.getIdListShow(token.token).then(value1=>{
-            API.checkItemFilm(value1,value.id).then(value2=>{
-              setIsShow(value2)
+          if(token.token.trim()){
+            API.getIdListShow(token.token).then(value1=>{
+              API.checkItemFilm(value1,value.id).then(value2=>{
+                setIsShow(value2)
+              })
             })
-          })
-        API.getIdListFav(token.token).then(value1=>{
-            API.checkItemFilm(value1,value.id).then(value2=>{
-              setIsFav(value2)
+            API.getIdListFav(token.token).then(value1=>{
+              API.checkItemFilm(value1,value.id).then(value2=>{
+                setIsFav(value2)
+              })
             })
-          })
+          }
+          
         }else{
           setItemTV(value)
         }
@@ -103,6 +104,7 @@ export default function ItemPage() {
     {!charge?
     <div className="bg-white text-gray-900 min-h-screen flex justify-center relative">
       {/*Botón para ir a la página anterior*/}
+     
      <button
         className="absolute top-2 left-2 bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full shadow-lg transition-transform transform hover:scale-110 z-50"
         onClick={() => navigate(-1)}
@@ -126,17 +128,17 @@ export default function ItemPage() {
       }
 
     {/* BOTONES FLOTANTES */}
-    <div className="fixed bottom-6 right-6 flex flex-col items-center space-y-4 z-50">
+    <div className="fixed bottom-6 right-6 flex flex-col items-center space-y-4 z-50 ">
       {/* Favoritos */}
-      {(state.type==='movie' && type!=='tv')?
+      {(state.type==='movie' && type!=='tv' && token.token.trim())?
         <div className="relative group">
           <button
             onClick={() => (!isFav)?saveMovieFav():removeMovieFav()}
-            className={(isFav)?`bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-transform transform group-hover:scale-110`:`bg-red-500 hover:bg-red-600 text-white p-4 rounded-full shadow-lg transition-transform transform group-hover:scale-110`}
+            className={(isFav)?`bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-transform transform group-hover:scale-110 cursor-pointer`:`cursor-pointer bg-red-500 hover:bg-red-600 text-white p-4 rounded-full shadow-lg transition-transform transform group-hover:scale-110`}
           >
             <FaHeart size={20} />
           </button>
-          <span className="absolute right-full mr-2 px-4 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <span className="absolute right-full mr-2 px-4 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-center">
            {(isFav)?`Quitar favorito`:`Añadir favorito`}
           </span>
         </div>
@@ -144,15 +146,15 @@ export default function ItemPage() {
       }
       
        {/* Ver más tarde */}
-      {(state.type==='movie' && type!=='tv')?
+      {(state.type==='movie' && type!=='tv'  && token.token.trim())?
         <div className="relative group">
           <button
             onClick={() => (!isShow)?saveMovieShow():removeMovieShow()}
-            className={(isShow)?`bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-transform transform group-hover:scale-110`:`bg-yellow-500 hover:bg-yellow-600 text-white p-4 rounded-full shadow-lg transition-transform transform group-hover:scale-110`}
+            className={(isShow)?`cursor-pointer bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-transform transform group-hover:scale-110`:`cursor-pointer bg-yellow-500 hover:bg-yellow-600 text-white p-4 rounded-full shadow-lg transition-transform transform group-hover:scale-110`}
           >
             <FaClock size={20} />
           </button>
-          <span className="absolute right-full mr-2 px-4 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <span className="absolute right-full mr-2 px-4 py-2 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-center">
            {(isShow)?`Quitar ver más tarde`:`Ver más tarde`}
           </span>
         </div>
@@ -165,15 +167,15 @@ export default function ItemPage() {
           onClick={() => {
             if (navigator.share) {
               navigator.share({
-                title: "No sé",
-                text: "¡Mira esta película!",
+                title: `${itemFilm?.title ?? itemTV?.title}`,
+                text: `¡Mira esta ${(type==='tv')?'serie':'película'} que acabo de encontrar!`,
                 url: window.location.href,
               });
             } else {
               alert("Tu navegador no soporta la función de compartir.");
             }
           }}
-          className="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-lg transition-transform transform group-hover:scale-110"
+          className="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-lg transition-transform transform group-hover:scale-110 cursor-pointer"
         >
           <FaShareAlt size={20} />
         </button>

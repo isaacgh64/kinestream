@@ -8,7 +8,7 @@ export type TokenState = {
 }
 
 const initialToken = () : string => {
-    const localStorageToken = localStorage.getItem('TOKEN')
+    const localStorageToken = localStorage.getItem('TOKENS')
     return localStorageToken ? localStorageToken : ""
 }
 

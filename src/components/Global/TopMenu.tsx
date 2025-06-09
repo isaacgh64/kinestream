@@ -19,7 +19,7 @@ export default function TopMenu() {
         >
           ☰
         </button>
-        <nav className={`absolute top-16 right-6 bg-blue-700 p-6 rounded-lg shadow-xl flex flex-col space-y-4 ${isOpen ? "block" : "hidden"} md:hidden`}>
+        <nav className={`z-80 absolute top-16 right-6 bg-blue-700 p-6 rounded-lg shadow-xl flex flex-col space-y-4 ${isOpen ? "block" : "hidden"} md:hidden`}>
           <Link 
             to={"/stream/movie/peliculas"} 
             className="hover:underline hover:text-yellow-300 transition duration-300"

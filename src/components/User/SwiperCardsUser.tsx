@@ -15,6 +15,10 @@ type SwiperSeasonProps = {
 export default function SwiperCardsUser({title,list}:SwiperSeasonProps) {
       const [index,setIndex] = useState(0)
       const swiperRef = useRef<SwiperType | null>(null)
+      const [visibleSlides, setVisibleSlides] = useState(0);
+      const onSlideChangeHandler = (swiper: SwiperType) => {
+        setIndex(swiper.realIndex)
+      };
       const incrementIndex = () => {
         if (swiperRef.current) {
           swiperRef.current.slideNext();
@@ -46,11 +50,19 @@ export default function SwiperCardsUser({title,list}:SwiperSeasonProps) {
                    640: { slidesPerView: 3, spaceBetween: 8 },
                    1024: { slidesPerView: 4, spaceBetween: 12 }
                  }}
-                 onSwiper={(swiper) => (swiperRef.current = swiper)}
+                  onSwiper={(swiper) => {
+                    swiperRef.current = swiper;
+                    setVisibleSlides(swiper.params.slidesPerView as number);
+                  }}
+                  onResize={(swiper) => {
+                    // Este evento se dispara al cambiar el tamaño de la ventana
+                    setVisibleSlides(swiper.params.slidesPerView as number);
+                  }}
+                  onSlideChange={onSlideChangeHandler}
                  
                >
                  {list.map((item, i) => (
-                   <SwiperSlide key={i} className='!w-62 flex-shrink-0'>
+                   <SwiperSlide key={i} className='w-48 sm:w-56 md:w-62 lg:w-72 xl:w-80 flex-shrink-0'>
                      <Cards key={`${i} / ${item}`} item={item} type='movie'/>
                    </SwiperSlide>
                  ))}
@@ -59,7 +71,7 @@ export default function SwiperCardsUser({title,list}:SwiperSeasonProps) {
                <button
                  className="swiper-button-next-custom bg-white border border-blue-500 text-blue-500 p-2 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition duration-300 h-11 ms-2 disabled:opacity-0"
                  onClick={incrementIndex}
-                 disabled={index >= list.length - 4}
+                 disabled={index >= list.length - visibleSlides}
                >
                  <ChevronRight size={25} />
                </button>

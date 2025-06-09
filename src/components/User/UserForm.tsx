@@ -29,7 +29,6 @@ export default function UserForm() {
     useEffect(()=>{
       async function getDataUser(){
         await API.getDataUser(token.token).then(value => {
-          console.log(value)
             setUser({
               name:(value!=null)?value.name:"",
               mail:(value!=null)?value.mail:"",

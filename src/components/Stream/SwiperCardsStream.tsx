@@ -27,6 +27,7 @@ export default function SwiperCardsPlatformStream({ title, id, type,genre }: Swi
   const [hasRequestedNext, setHasRequestedNext] = useState(false)
   const swiperRef = useRef<SwiperType | null>(null);
   const [charge,setCharge] = useState<boolean>(true)
+  const [visibleSlides, setVisibleSlides] = useState(0);
 
   useEffect(()=>{
     API.getStreamPlatformsGenres(type,id,genre,page).then(value=>{
@@ -38,10 +39,10 @@ export default function SwiperCardsPlatformStream({ title, id, type,genre }: Swi
   const onSlideChangeHandler = (swiper: SwiperType) => {
     setIndex(swiper.realIndex);
 
-    if (swiper.realIndex >= list.length - 4 && !hasRequestedNext) {
+    if (swiper.realIndex >= list.length - visibleSlides && !hasRequestedNext) {
       setPage(prev => prev + 1);
       setHasRequestedNext(true);
-    } else if (swiper.realIndex < list.length - 4) {
+    } else if (swiper.realIndex < list.length - visibleSlides) {
       setHasRequestedNext(false);
     }
   };
@@ -84,7 +85,13 @@ export default function SwiperCardsPlatformStream({ title, id, type,genre }: Swi
                 640: { slidesPerView: 3, spaceBetween: 8 },
                 1024: { slidesPerView: 4, spaceBetween: 12 }
               }}
-              onSwiper={(swiper) => (swiperRef.current = swiper)}
+              onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  setVisibleSlides(swiper.params.slidesPerView as number);
+              }}
+              onResize={(swiper) => {
+                  setVisibleSlides(swiper.params.slidesPerView as number);
+              }}
               onSlideChange={onSlideChangeHandler}
             >
               {list.map((item, i) => (
@@ -97,7 +104,7 @@ export default function SwiperCardsPlatformStream({ title, id, type,genre }: Swi
             <button
               className="swiper-button-next-custom bg-white border border-blue-500 text-blue-500 p-2 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition duration-300 h-11 ms-2 disabled:opacity-0"
               onClick={incrementIndex}
-              disabled={index >= list.length - 4}
+              disabled={index >= list.length - visibleSlides}
             >
               <ChevronRight size={25} />
             </button>

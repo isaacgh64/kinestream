@@ -65,8 +65,7 @@ export class API {
             if (data.code === 201) {
                 API.createList(`${mail}`,`Ver más tarde`).then(value=>{
                     API.createList(`${mail}`,`Favoritos`).then(value1=>{
-                        API.insertList(value,value1,data.token).then(value=>{
-                            console.log(value)
+                        API.insertList(value,value1,data.token).then(()=>{
                             dispatch({type:"add-token",payload:{token:data.token}})
                             return true;
                         })
@@ -368,7 +367,6 @@ export class API {
             })
         }).then(response => response.json())
         .then(data => {
-            console.log(data.id)
             return data.id
         })
         .catch(error => {
@@ -389,7 +387,6 @@ export class API {
             })
         }).then(response => response.json())
         .then(data => {
-            console.log(data.id)
             return data.id
         })
         .catch(error => {

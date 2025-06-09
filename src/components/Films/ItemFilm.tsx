@@ -1,3 +1,4 @@
+import { useState } from "react"
 import Film from "../../models/film"
 import Starts from "../../models/starts"
 import { Globals } from "../../Utils/globals"
@@ -10,16 +11,28 @@ type ItemFilmProps = {
     video:string
 }
 export default function ItemFilm({item,video,start}:ItemFilmProps) {
+     const [isLoading, setIsLoading] = useState(true);
 
   return (
     <main className="w-full max-w-7xl bg-white shadow-2xl rounded-b-2xl overflow-hidden">
         {/* Imagen cabecera */}
         <div className="aspect-video w-full">
-        <img
-            src={(item?.backdropPath?.trim()) ? `https://image.tmdb.org/t/p/w1280/${item?.backdropPath}` : Globals.noPhoto}
-            alt={`Póster de la película ${item?.title}`}
-            className="w-full h-full object-cover rounded-b-2xl"
-        />
+            <div>
+                {isLoading && (
+                <img 
+                    src="/loading.gif"
+                    alt="Cargando..." 
+                    className="w-full h-full object-cover rounded-b-2xl"
+                />
+                        )}
+                        <img
+                        src={(item?.backdropPath?.trim()) ? `https://image.tmdb.org/t/p/w1280/${item.backdropPath}` : Globals.noPhoto}
+                        alt={`Póster de la película ${item?.title}`}
+                        className={`w-full h-full object-cover rounded-b-2xl ${isLoading ? 'hidden' : ''}`}
+                        onLoad={() => setIsLoading(false)} // Oculta el loader cuando la imagen se carga
+                        />
+                </div>
+        
         </div>
 
         <h1 className="text-center text-4xl sm:text-5xl font-bold mt-6 text-blue-500">
@@ -67,18 +80,18 @@ export default function ItemFilm({item,video,start}:ItemFilmProps) {
 
         {/* Tráiler */}
         {video?.trim() ? (
-            <div>
-            <h2 className="font-semibold text-2xl sm:text-3xl mb-2 border-b-2 border-blue-500">
-                Tráiler
-            </h2>
-            <div className="w-full aspect-video rounded-lg overflow-hidden">
-                <iframe
-                src={`https://www.youtube.com/embed/${video}`}
-                className="w-full h-full"
-                allowFullScreen
-                title="Tráiler"
-                ></iframe>
-            </div>
+            <div className="relative z-60">
+                <h2 className="font-semibold text-2xl sm:text-3xl mb-2 border-b-2 border-blue-500">
+                    Tráiler
+                </h2>
+                <div className="w-full aspect-video rounded-lg overflow-hidden">
+                    <iframe
+                    src={`https://www.youtube.com/embed/${video}`}
+                    className="w-full h-full"
+                    allowFullScreen
+                    title="Tráiler"
+                    ></iframe>
+                </div>
             </div>
         ) : <p></p>}
         </section>

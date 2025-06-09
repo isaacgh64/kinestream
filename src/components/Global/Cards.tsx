@@ -15,8 +15,7 @@ export default function Cards({ item,type }: CardsType) {
   const [isLoading, setIsLoading] = useState(true);
 
   function navigatePage() {
-    navigate(`/content?type=${type??'movie'}&id=${item.id}`)
-    
+    navigate(`/content?type=${type ?? 'movie'}&id=${item.id}`);
   }
 
   return (
@@ -25,17 +24,18 @@ export default function Cards({ item,type }: CardsType) {
       className="inline-block w-full max-w-48 sm:max-w-60 md:max-w-72 lg:max-w-80 bg-white overflow-hidden rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 mt-6 me-3 cursor-pointer"
     >
       <div>
+        
         {isLoading && (
           <img 
             src="/loading.gif"
             alt="Cargando..." 
-            className="absolute inset-0 w-full h-full object-cover"
+            className="object-cover w-full aspect-[2/3]"
           />
                 )}
                 <img
                   src={(item?.posterPath?.trim()) ? `https://image.tmdb.org/t/p/w1280/${item.posterPath}` : Globals.noPhoto}
                   alt={`Póster de la película ${item.title}`}
-                  className="object-cover w-full aspect-[2/3]"
+                  className={`object-cover w-full aspect-[2/3] ${isLoading ? 'hidden' : ''}`}
                   onLoad={() => setIsLoading(false)} // Oculta el loader cuando la imagen se carga
                 />
         </div>

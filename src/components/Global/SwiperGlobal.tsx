@@ -18,6 +18,7 @@ export default function SwiperSeason({listStarts,listSeason,type}:SwiperSeasonPr
       const listLength:number = (listSeason?.length??0 >0)?listSeason?.length ?? 0:listStarts?.length ?? 0
       const [index,setIndex] = useState(0)
       const swiperRef = useRef<SwiperType | null>(null)
+      const [visibleSlides, setVisibleSlides] = useState(0);
       const incrementIndex = () => {
         if (swiperRef.current) {
           swiperRef.current.slideNext();
@@ -41,7 +42,13 @@ export default function SwiperSeason({listStarts,listSeason,type}:SwiperSeasonPr
                 0: { slidesPerView: 2, spaceBetween:4 },  
                 640: { slidesPerView: 3,spaceBetween:4  },  
                 1024: { slidesPerView: 6,spaceBetween:4  }  
-              }} onSwiper={(swiper) => (swiperRef.current = swiper)}onSlideChange={(swiper) => setIndex(swiper.realIndex)}>
+              }} onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  setVisibleSlides(swiper.params.slidesPerView as number);
+              }}
+              onResize={(swiper) => {
+                  setVisibleSlides(swiper.params.slidesPerView as number);
+              }}onSlideChange={(swiper) => setIndex(swiper.realIndex)}>
                     {
                         (type==='starts')?
                         <div className='w-full'>
@@ -75,7 +82,7 @@ export default function SwiperSeason({listStarts,listSeason,type}:SwiperSeasonPr
                          
                     }
               </Swiper>
-              <button className="swiper-button-next-custom  bg-white border border-blue-500 text-blue-500 p-2 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition duration-300 h-11 ms-2  disabled:opacity-0" onClick={incrementIndex}  disabled={index >= listLength - 6} >
+              <button className="z-60 swiper-button-next-custom  bg-white border border-blue-500 text-blue-500 p-2 rounded-full shadow-md hover:bg-blue-500 hover:text-white transition duration-300 h-11 ms-2  disabled:opacity-0" onClick={incrementIndex}  disabled={index >= listLength - visibleSlides} >
                 <ChevronRight size={25} />
               </button>
             </div>
