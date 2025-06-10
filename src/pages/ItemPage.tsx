@@ -188,7 +188,7 @@ export default function ItemPage() {
 
     </div>
 
-    :<Charging/> }
+    :<Charging text={"Cargando..."}/> }
       
     </>
     

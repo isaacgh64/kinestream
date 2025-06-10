@@ -7,12 +7,14 @@ import { useToken } from "../../hooks/useToken"
 import { API } from "../../Utils/api"
 import { useNavigate } from "react-router-dom"
 import { Globals } from "../../Utils/globals"
+import Charging from "../Global/Charging"
 
 
 export default function RegisterView() {
     const [error,setError] = useState('')
     const {dispatch} = useToken()
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+    const [showLogIn,setShowLogIn] = useState(false)
     
     //State check LogIn data
     const [register, setRegister] = useState<RegisterType>({
@@ -79,10 +81,28 @@ export default function RegisterView() {
         if(register.password !== register.repassword){
           setError('Las contraseñas no coinciden')
           return
-      }
-         API.register(register.name,register.mail,register.password,dispatch).then(value3 => {
-            if(value3===true){
-                navigate("/user");
+        }
+        
+        if(register.password.length < 8){
+          setError('La contraseña debe tener 8 caracteres')
+          return
+        }
+        setShowLogIn(true)
+         API.register(register.name,register.mail,register.password,dispatch).then(value => {
+            console.log(`TOKEN:  ${value}`)
+            if(value.trim()){
+                API.createList(`${register.mail}`,`Ver más tarde`).then(idshow=>{
+                    console.log(`LISTA 1:  ${idshow}`)
+                    API.createList(`${register.mail}`,`Favoritos`).then(idFav=>{
+                        console.log(`LISTA 2:  ${idFav}`)
+                        API.insertList(idFav,idshow,value).then(()=>{
+                            setError('')
+                            setShowLogIn(false)
+                            navigate("/user")
+                        })
+                    })
+                })
+                
             }else{
                 setError(Globals.messageError);
                 }   
@@ -91,6 +111,7 @@ export default function RegisterView() {
 
     return (
       <>
+        {showLogIn &&(<Charging text={'Iniciando sesión...'}/>)}
         <form className="space-y-4 mt-4" onSubmit={handleSubmit}>
           {/*Input name*/}
           <div className="mb-4 flex flex-col gap-2">

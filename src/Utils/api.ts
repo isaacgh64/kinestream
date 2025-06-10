@@ -48,7 +48,7 @@ export class API {
     }
 
     //Register a new accountç
-    public static register(name : string, mail : string, password : string,dispatch: React.Dispatch<TokenActions>): Promise<boolean> {
+    public static register(name : string, mail : string, password : string,dispatch: React.Dispatch<TokenActions>): Promise<string> {
         return fetch(Globals.serverUrl + "/create_user.php", {
             method: "POST",
             headers: {
@@ -63,29 +63,29 @@ export class API {
         .then(response => response.json())
         .then(data => {
             if (data.code === 201) {
-                API.createList(`${mail}`,`Ver más tarde`).then(value=>{
-                    API.createList(`${mail}`,`Favoritos`).then(value1=>{
-                        API.insertList(value,value1,data.token).then(()=>{
-                            dispatch({type:"add-token",payload:{token:data.token}})
-                            return true;
-                        })
-                    })
-                })
+                dispatch({type:"add-token",payload:{token:data.token}})
+                return data.token;
+                
             } else if (data.code === 400) {
                 Globals.messageError = "Los datos no son correctos";
+              
             }else if (data.code === 409) {
                 Globals.messageError = "El correo electrónico ya existe";
+                
             } else if (data.code === 500) {
                 Globals.messageError = "Algo fue mal, intentelo más tarde";
+               
             } else {
                 Globals.messageError = "dialog";
+                
             }
-            return false;
+            return "";
+            
         })
         .catch(error => {
             console.log(error);
             Globals.messageError = "Error de conexión con el servidor";
-            return false; 
+            return ""; 
         });
     }
 
@@ -467,7 +467,7 @@ export class API {
             },
         }).then(response => response.json())
         .then(data => {
-           return data.items.map((item: any) => Films.fromJson(item));
+           return data?.items.map((item: any) => Films.fromJson(item));
         })
         .catch(error => {
             console.log(error);

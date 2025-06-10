@@ -64,7 +64,7 @@ export default function SwiperCardsPlatformStream({ title, id, type,genre }: Swi
   return (
     <>
       {(charge)?
-        <Charging/>
+        <Charging text={'Cargando...'}/>
       :
         (list.length>0)?
           <section className="max-w-6xl mx-auto py-3">

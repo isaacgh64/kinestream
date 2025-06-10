@@ -18,16 +18,21 @@ export default function UserPage() {
         navigate("/login");
       }else{
         API.getIdListShow(token.token).then(value=>{
-          API.getFilmsList(value).then(value1=>{
-            setFilms(value1)
+          if(value !== null){
+            API.getFilmsList(value).then(value1=>{
+              setFilms(value1)
           })
+          }
+          
         })
 
         API.getIdListFav(token.token).then(value=>{
-          API.getFilmsList(value).then(value1=>{
-            setFavs(value1)
+          if(value !== null){
+            API.getFilmsList(value).then(value1=>{
+               setFavs(value1)
           })
-        })
+          
+        }})
       }
     },[token.token,navigate])
     

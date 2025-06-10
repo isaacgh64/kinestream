@@ -38,7 +38,7 @@ export default function SwiperCardsStream({title,type}:SwiperCardsStreamProps) {
           </div>
         </section>
       ) : (
-        <Charging />
+        <Charging text={'Cargando...'}/>
       )}
     </>
 
