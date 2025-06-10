@@ -89,12 +89,9 @@ export default function RegisterView() {
         }
         setShowLogIn(true)
          API.register(register.name,register.mail,register.password,dispatch).then(value => {
-            console.log(`TOKEN:  ${value}`)
-            if(value.trim()){
+            if(value.trim()&&value!=='mail'){
                 API.createList(`${register.mail}`,`Ver más tarde`).then(idshow=>{
-                    console.log(`LISTA 1:  ${idshow}`)
                     API.createList(`${register.mail}`,`Favoritos`).then(idFav=>{
-                        console.log(`LISTA 2:  ${idFav}`)
                         API.insertList(idFav,idshow,value).then(()=>{
                             setError('')
                             setShowLogIn(false)
@@ -104,8 +101,9 @@ export default function RegisterView() {
                 })
                 
             }else{
+                setShowLogIn(false)
                 setError(Globals.messageError);
-                }   
+            }   
         });
     }
 

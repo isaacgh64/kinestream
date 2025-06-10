@@ -79,7 +79,7 @@ export class API {
                 Globals.messageError = "dialog";
                 
             }
-            return "";
+            return 'mail';
             
         })
         .catch(error => {
