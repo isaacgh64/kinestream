@@ -345,6 +345,7 @@ export class API {
             })
         }).then(response => response.json())
         .then(data => {
+            console.log(data)
             return data.list_id
            
         })

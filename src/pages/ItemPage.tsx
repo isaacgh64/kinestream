@@ -23,6 +23,9 @@ export default function ItemPage() {
   const [charge,setCharge] = useState<boolean>(true)
   const [isShow,setIsShow] = useState<boolean>(false)
   const [isFav,setIsFav] = useState<boolean>(false)
+  const [insert,setInsert] = useState<boolean>(false)
+  const [idFav,setIdFav] = useState<number>(0)
+  const [idShow,setIdShow] = useState<number>(0)
   const query = new URLSearchParams(search)
   const id = query.get("id")
   const type = query.get("type")
@@ -39,20 +42,38 @@ export default function ItemPage() {
           setItemFilm(value)
           if(token.token.trim()){
             API.getIdListShow(token.token).then(value1=>{
-              API.checkItemFilm(value1,value.id).then(value2=>{
-                setIsShow(value2)
-              })
+              if(value1===0){
+                API.createList(`${token.token}`,`${token.token}`).then((id)=>{
+                  console.log(id)
+                  setIdShow(id)
+                  setInsert(true)
+                })
+              }else{
+                setIdShow(value1)
+                API.checkItemFilm(value1,value.id).then(value2=>{
+                  setIsShow(value2)
+                })
+              }
             })
             API.getIdListFav(token.token).then(value1=>{
-              API.checkItemFilm(value1,value.id).then(value2=>{
-                setIsFav(value2)
-              })
+              if(value1===0){
+                API.createList(`${token.token}`,`${token.token}`).then((id)=>{
+                  console.log(id)
+                  setIdFav(id)
+                  setInsert(true)
+                })
+              }else{
+                setIdFav(value1)
+                API.checkItemFilm(value1,value.id).then(value2=>{
+                  setIsFav(value2)
+                })
+              }
             })
           }
-          
         }else{
           setItemTV(value)
         }
+         
         API.getStarts(idint,(type==="tv")?type:state.type).then(value=>{
           setStart(value)
           API.getTrailer(idint,(type==="tv")?type:state.type).then(value=>{
@@ -67,6 +88,14 @@ export default function ItemPage() {
     }
    
   },[])
+
+  useEffect(() => {
+  if (insert && idFav && idShow) {
+    API.insertList(idFav, idShow, token.token).then(value => {
+      console.log("Insertado en la lista:", value)
+    });
+  }
+}, [insert, idFav, idShow])
 
   function saveMovieShow(){
     API.getIdListShow(token.token).then(value=>{

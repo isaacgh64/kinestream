@@ -89,9 +89,10 @@ export default function RegisterView() {
         }
         setShowLogIn(true)
          API.register(register.name,register.mail,register.password,dispatch).then(value => {
+            console.log(value)
             if(value.trim()&&value!=='mail'){
-                API.createList(`${register.mail}`,`Ver más tarde`).then(idshow=>{
-                    API.createList(`${register.mail}`,`Favoritos`).then(idFav=>{
+                API.createList(`${register.mail}`,`${register.mail}`).then(idshow=>{
+                    API.createList(`${register.mail}`,`${register.mail}`).then(idFav=>{
                         API.insertList(idFav,idshow,value).then(()=>{
                             setError('')
                             setShowLogIn(false)

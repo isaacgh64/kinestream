@@ -18,7 +18,7 @@ export default function UserPage() {
         navigate("/login");
       }else{
         API.getIdListShow(token.token).then(value=>{
-          if(value !== null){
+          if(value !== 0){
             API.getFilmsList(value).then(value1=>{
               setFilms(value1)
           })
@@ -27,7 +27,7 @@ export default function UserPage() {
         })
 
         API.getIdListFav(token.token).then(value=>{
-          if(value !== null){
+          if(value !== 0){
             API.getFilmsList(value).then(value1=>{
                setFavs(value1)
           })
