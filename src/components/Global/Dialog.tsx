@@ -1,18 +1,16 @@
 import React from "react";
-import { Globals } from "../../Utils/globals";
 
 interface DialogProps {
-  mensaje: string;
+  message: string;
   visible: boolean;
   onClose: () => void;
 }
 
-const Dialogo: React.FC<DialogProps> = ({ mensaje, onClose,visible }) => {
+const Dialog: React.FC<DialogProps> = ({ message, onClose,visible }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50" hidden={!visible}>
             <div className="bg-white shadow-xl rounded-lg p-6 max-w-sm w-full border border-blue-500 z-50">
-                <h2 className="text-lg font-bold text-blue-500">{mensaje}</h2>
-                <p className="text-gray-700 mt-2">{Globals.messageError}</p>
+                <h2 className="text-lg font-bold text-blue-500">{message}</h2>
                 <div className="flex justify-center mt-4">
                     <button
                         onClick={onClose}
@@ -27,4 +25,4 @@ const Dialogo: React.FC<DialogProps> = ({ mensaje, onClose,visible }) => {
     );
 };
 
-export default Dialogo;
+export default Dialog;

@@ -477,28 +477,76 @@ export class API {
 
     //Get Temporal token
     public static createSessionId(requestToken: string): Promise<string> {
-    return fetch(`${Globals.serverApi}3/authentication/session/new?api_key=${Globals.apiKey}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            request_token: requestToken
+        return fetch(`${Globals.serverApi}3/authentication/session/new?api_key=${Globals.apiKey}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                request_token: requestToken
+            })
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            return data.session_id;
-        } else {
-            throw new Error("No se pudo crear el session_id");
-        }
-    })
-    .catch(error => {
-        console.log(error);
-        throw error;
-    });
-}
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                return data.session_id;
+            } else {
+                throw new Error("No se pudo crear el session_id");
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            throw error;
+        });
+    }
+
+    //Change password with mail
+    public static changePassword(mail: string):Promise<boolean> {
+        return fetch(Globals.serverUrl + "/send_password.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: mail,
+            }),
+        })
+        .then(response => response.json())
+        .then(() => {
+            return true
+        })
+        .catch(error => {
+            console.log(error);
+            return false; 
+        });
+    }
+
+    //Change password with token
+    public static modifyPassword(password: string, token:string):Promise<boolean> {
+        return fetch(Globals.serverUrl + "/update_password.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                token: token,
+                password: password,
+            }),
+        })
+        .then(response => response.json())
+        .then((data) => {
+            if(data.code===202){
+                return true
+            }else{
+                return false
+            }
+            
+        })
+        .catch(error => {
+            console.log(error);
+            return false; 
+        });
+    }
 
 
 
