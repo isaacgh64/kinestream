@@ -44,7 +44,6 @@ export default function ItemPage() {
             API.getIdListShow(token.token).then(value1=>{
               if(value1===0){
                 API.createList(`${token.token}`,`${token.token}`).then((id)=>{
-                  console.log(id)
                   setIdShow(id)
                   setInsert(true)
                 })
@@ -58,7 +57,6 @@ export default function ItemPage() {
             API.getIdListFav(token.token).then(value1=>{
               if(value1===0){
                 API.createList(`${token.token}`,`${token.token}`).then((id)=>{
-                  console.log(id)
                   setIdFav(id)
                   setInsert(true)
                 })

@@ -116,7 +116,10 @@ export default function LoginView() {
                         </button>
                     </div>
                 </div>
-                 <p className="text-blue-500 text-sm cursor-pointer mt-2" onClick={()=>setIsDialogOpen(true)}>
+                 <p className="text-blue-500 text-sm cursor-pointer mt-2" onClick={()=>{
+                    setIsDialogOpen(true)
+                    setError("")
+                    }}>
                     ¿Olvidó su contraseña?
                 </p>
                 {error && <ErrorMessage>{error}</ErrorMessage>}
